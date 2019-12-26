@@ -1,3 +1,5 @@
+import pymysql
+pymysql.install_as_MySQLdb()
 import MySQLdb
 import mwclient
 try:
