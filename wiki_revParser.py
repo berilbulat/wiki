@@ -85,7 +85,7 @@ def getAddedDeletedDiff(oneRevision):
 '''
 
 def writeLocalDB ( result ):
-		db = MySQLdb.connect ( "localhost","root","cmn_2019","wiki" )
+		db = MySQLdb.connect ( "localhost","root","adalovelace","wiki" )
 		sql = "insert into revisions ( id, info, pageTitle ) values ( %s, %s, %s )"
 
 		cursor = db.cursor ( )
@@ -98,7 +98,7 @@ def writeLocalDB ( result ):
 		db.close ( )
 
 def updateLocalDB ( result ):
-		db = MySQLdb.connect ( "localhost","root","cmn_2019","wiki" )
+		db = MySQLdb.connect ( "localhost","root","adalovelace","wiki" )
 		sql = "update revisions set added = %s, deleted = %s, diff = %s where id = %s"
 		cursor = db.cursor ( )
 		try:
