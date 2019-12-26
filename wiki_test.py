@@ -8,7 +8,7 @@ warnings.filterwarnings(action='ignore')
 import argparse
 import requests, json
 from bs4 import BeautifulSoup
-
+import difflib
 
 
 if __name__ == "__main__":
@@ -45,3 +45,6 @@ if __name__ == "__main__":
 		set(deletedText.split()).difference(set(addText.split()))
 
 		print( set(addText.split()).difference(set(deletedText.split())) )
+		diff_list = [li for li in difflib.ndiff(addText, deletedText) if li[0] != ' ']
+		print(diff_list)
+		print(len(diff_list))

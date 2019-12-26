@@ -55,9 +55,8 @@ if __name__ == "__main__":
 			revDct = getRevisionInfo(item) 
 			detailDct = getRevisionDetails(detail)
 			
-			# update to add fields from one dict to the other
-			# notice that we update detailDct, which doesn't have meaningful data in some occasions
 			detailDct.update(revDct) 
 			combinedRevisions.append(detailDct)
 
-		print(combinedRevisions)
+		print(combinedRevisions[0])
+		
