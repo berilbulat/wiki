@@ -16,6 +16,22 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `deletions`
+--
+
+DROP TABLE IF EXISTS `deletions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `deletions` (
+  `pageURL` mediumtext,
+  `linkInfo` longtext,
+  `linkDetails` longtext,
+  `autoID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`autoID`)
+) ENGINE=InnoDB AUTO_INCREMENT=17152 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `revisions`
 --
 
@@ -42,4 +58,4 @@ CREATE TABLE `revisions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-26  6:31:37
+-- Dump completed on 2020-01-04  3:52:40

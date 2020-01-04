@@ -80,7 +80,7 @@ def getAddedDeletedDiff(oneRevision):
 | pageTitle | text       | YES  |     | NULL    |       |
 | added     | mediumtext | YES  |     | NULL    |       |
 | deleted   | mediumtext | YES  |     | NULL    |       |
-| diff      | text       | YES  |     | NULL    |       |
+| diff      | mediumtext | YES  |     | NULL    |       |
 +-----------+------------+------+-----+---------+-------+
 '''
 

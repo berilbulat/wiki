@@ -49,5 +49,5 @@ if __name__ == "__main__":
 		print "we got NO info for {} revisions.".format(len(noRevisionInfo))
 
 		json.dump(allRevisionInfo, open(args.pageTitle + ".json", 'w'))
-
-		json.dump(noRevisionInfo, open("No-result-" + args.pageTitle + ".json", 'w'))
+		if noRevisionInfo:
+			json.dump(noRevisionInfo, open("No-result-" + args.pageTitle + ".json", 'w'))
