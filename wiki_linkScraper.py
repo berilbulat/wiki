@@ -10,6 +10,7 @@ import re
 import requests, json
 from bs4 import BeautifulSoup
 import argparse
+from datetime import datetime
 
 '''
 +-------------+------------+------+-----+---------+----------------+
@@ -33,13 +34,25 @@ def writeLocalDB ( result ):
 		except Exception as e:
 			print ( "ERROR write- : " + str( e ) )
 			db.rollback ( )
-		db.close ( )
+		finally:
+			db.close ( )
 
 def dateTimeExtract ( Text ):  # to extract dateTime with Regex
 	dateTime = re.search('(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9],.*$', Text) 
 	if dateTime:
 		return dateTime.group().strip()
 	return ""
+
+def dateTimeConvert ( DT ):  # to convert dateTime
+	if DT:
+		print("DT: " + str(DT))
+		DATE = DT.split(" (UTC)")
+
+		DT = str(DATE[0]).strip()
+		datetime_object = datetime.strptime(DT, '%H:%M, %d %B %Y')
+		# %Y-%m-%d %H:%M:%S
+		return datetime_object.strftime('%Y-%m-%d %H:%M:%S') 
+	return DT
 
 if __name__ == "__main__":
 		ap = argparse.ArgumentParser ( )
@@ -75,7 +88,7 @@ if __name__ == "__main__":
 			if dateTime in date:
 				decision = str( date.replace(dateTime, "") ).strip()
 
-			linkInfo["dateTime"] = str(dateTime) # edited time
+			linkInfo["dateTime"] = dateTimeConvert(dateTime) # edited time
 			linkInfo["dateTime_decision"] = decision # decision that appears next to date and time, always "closed" for every artcile, but kept it anyways
 			linkInfo["linkTitle"] = linkTitle # title for the link
 			linkInfo["link"] = link # link itself, basically same as above, but kept it
