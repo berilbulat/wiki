@@ -67,7 +67,8 @@ def dateTimeConvert ( DT ):  # to convert dateTime
 		DATE = DT.split(" (UTC)")
 
 		DT = str(DATE[0]).strip()
-		datetime_object = datetime.strptime(DT, '%H:%M, %d %B %Y')
+		DT = DT.replace(",","")
+		datetime_object = datetime.strptime(DT, '%H:%M %d %B %Y')
 		# %Y-%m-%d %H:%M:%S
 		return datetime_object.strftime('%Y-%m-%d %H:%M:%S') 
 	return DT
