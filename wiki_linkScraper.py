@@ -31,6 +31,11 @@ def writeLocalDB ( result ):
 			db.rollback ( )
 		db.close ( )
 
+def dateTimeExtract ( Text ):  # to extract dateTime with Regex
+	dateTime = re.search('(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9],.*$', Text) 
+	if dateTime:
+		return dateTime.group().strip()
+	return ""
 
 if __name__ == "__main__":
 		ap = argparse.ArgumentParser ( )
@@ -60,13 +65,13 @@ if __name__ == "__main__":
 			linkTitle = res.find("a").attrs["title"]
 
 			date = str(res.find("small").text) # This is to be able to substract dates later for table 3
-			dateTime = re.search('(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9],.*$', date)
+			dateTime = dateTimeExtract(date)
 			# print(dateTime.group())
 
-			if dateTime.group() in date:
-				decision = str( date.replace(dateTime.group(), "") ).strip()
+			if dateTime in date:
+				decision = str( date.replace(dateTime, "") ).strip()
 
-			linkInfo["dateTime"] = str(dateTime.group()) # edited time
+			linkInfo["dateTime"] = str(dateTime) # edited time
 			linkInfo["dateTime_decision"] = decision # decision that appears next to date and time, always "closed" for every artcile, but kept it anyways
 			linkInfo["linkTitle"] = linkTitle # title for the link
 			linkInfo["link"] = link # link itself, basically same as above, but kept it
