@@ -12,14 +12,14 @@ from bs4 import BeautifulSoup
 import argparse
 
 '''
-+-------------+------------+------+-----+---------+-------+
-| Field       | Type       | Null | Key | Default | Extra |
-+-------------+------------+------+-----+---------+-------+
-| pageURL     | mediumtext | YES  |     | NULL    |       |
-| linkInfo    | longtext   | YES  |     | NULL    |       |
-| linkDetails | longtext   | YES  |     | NULL    |       |
-+-------------+------------+------+-----+---------+-------+
-
++-------------+------------+------+-----+---------+----------------+
+| Field       | Type       | Null | Key | Default | Extra          |
++-------------+------------+------+-----+---------+----------------+
+| pageURL     | mediumtext | YES  |     | NULL    |                |
+| linkInfo    | longtext   | YES  |     | NULL    |                |
+| linkDetails | longtext   | YES  |     | NULL    |                |
+| autoID      | int(11)    | NO   | PRI | NULL    | auto_increment |
++-------------+------------+------+-----+---------+----------------+
 '''
 
 def writeLocalDB ( result ):
