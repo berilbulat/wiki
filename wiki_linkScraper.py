@@ -24,7 +24,7 @@ from datetime import datetime
 '''
 
 def writeLocalDB ( result ):
-		db = MySQLdb.connect ( "localhost","root","cmn_2019","wiki" )
+		db = MySQLdb.connect ( "localhost","root","adalovelace","wiki" )
 		sql = "insert into deletions ( pageURL, linkInfo ) values ( %s, %s )" 
 
 		cursor = db.cursor ( )

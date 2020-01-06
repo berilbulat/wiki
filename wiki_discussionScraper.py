@@ -25,7 +25,7 @@ from datetime import datetime
 
 def readLocalDB ( page ):
 		# Open database connection
-		db = MySQLdb.connect ( "localhost","root","cmn_2019","wiki" )
+		db = MySQLdb.connect ( "localhost","root","adalovelace","wiki" )
 
 		# prepare a cursor object using cursor  method
 		cursor = db.cursor ()
@@ -42,7 +42,7 @@ def readLocalDB ( page ):
 		return results
 
 def updateLocalDB ( result ):
-		db = MySQLdb.connect ( "localhost","root","cmn_2019","wiki" )
+		db = MySQLdb.connect ( "localhost","root","adalovelace","wiki" )
 		sql = "update deletions set linkDetails = %s where autoID = %s"
 
 		cursor = db.cursor ( )
