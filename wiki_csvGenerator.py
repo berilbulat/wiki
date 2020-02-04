@@ -29,7 +29,7 @@ def readLocalDB_Revisions ( ):
 		# prepare a cursor object using cursor  method
 		cursor = db.cursor ()
 
-		sql = "select id, info, added, deleted, diff from revisions"
+		sql = "select id, info, added, deleted, diff, pageTitle from revisions"
 		try:
 			cursor.execute ( sql )
 			results = cursor.fetchall ( )
@@ -185,6 +185,7 @@ if __name__ == "__main__":
 	results['revClosestDate'] = []
 	results['revClosestID'] = []
 	results['revEditSize'] = []
+	results['revPageTitle'] = []
 
 	for dels in delIdentifier:
 		try:
@@ -254,10 +255,12 @@ if __name__ == "__main__":
 			CLOSEST_revID = -100
 			CLOSEST_diff = -100
 			CLOSEST_revIndex = -100
-			for revIndex, rev in enumerate(revIdentifier):  # Go through the revisions, find the closes date, and keep index number to calculate the edit size  
+			CLOSEST_pageTitle = -100
+			for revIndex, rev in enumerate(revIdentifier):  # Go through the revisions, find the closes date, and keep index number to calculate the edit size 
 				revID = rev[0] # Revision ID 
 				if not rev[1]:
 					continue
+				revPageTitle = rev[5]
 				info = json.loads(rev[1])
 
 				# Find the closest preceding policy
@@ -274,17 +277,19 @@ if __name__ == "__main__":
 					CLOSEST_date = revTime_obj
 					CLOSEST_revID = revID
 					CLOSEST_diff = secondDiff
-					CLOSEST_revIndex = revIndex
+					CLOSEST_pageTitle = revPageTitle
 					continue
 				if secondDiff < CLOSEST_diff:
 					CLOSEST_date = revTime_obj
 					CLOSEST_revID = revID
 					CLOSEST_diff = secondDiff
 					CLOSEST_revIndex = revIndex
+					CLOSEST_pageTitle = revPageTitle
 
 			print("autoID: " + str(autoID))
 			print("revClosestDate: " + str(CLOSEST_date))
 			print("revClosest_ID: " + str(CLOSEST_revID))
+			print("revPageTitle: " + str(CLOSEST_pageTitle))
 
 			editSize = findRevEditSize(revIdentifier[CLOSEST_revIndex])
 			print("editSize: " + str(editSize))
@@ -315,15 +320,18 @@ if __name__ == "__main__":
 			results['revClosestDate'].append(str(CLOSEST_date))
 			results['revClosestID'].append(CLOSEST_revID)
 			results['revEditSize'].append(editSize)
-
+			results['revPageTitle'].append(CLOSEST_pageTitle)
+			
 			print("-------------------------")
 		except Exception as e:
 				print ( "ERROR __main__ : " + str( e ) )
 				continue
 
+	print(results)
+	df = pd.DataFrame(results)
+	print(df)
 
-		df = pd.DataFrame(results)
-		print(df)
+	columnsTitles = [ 'articleTitle' ,'articleLink' ,'discussionResult' ,'discussionResultDate' ,'totalUser' ,'totalPosts' ,'totalWords' ,'totalChars' ,'keepVote' ,'deleteVote' ,'otherVotesCount' ,'generalNotabilityCount' ,'eventNotabilityCount' ,'orgNotabilityCount' ,'otherNotabilityCount' ,'revClosestDate' ,'revClosestID', 'revEditSize', 'revPageTitle' ]
+	df.to_csv("wiki_data.csv", encoding='utf-8', index=False, columns=columnsTitles)
 
-		df.to_csv("wiki_data.csv", encoding='utf-8', index=False)
 
