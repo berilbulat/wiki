@@ -166,6 +166,7 @@ if __name__ == "__main__":
 	results['articleLink'] = []
 
 	results['discussionResult'] = []
+        results['discussionStartDate'] = []
 	results['discussionResultDate'] = []
 
 	results['totalUser'] = []
@@ -296,7 +297,8 @@ if __name__ == "__main__":
 			print("articleTitle: " + str(articleTitle))
 			print("articleLink: " + str(articleLink))
 			print("discussionResult: " + str(discussionResult))
-			print("discussionResultDate: " + str(discussionResultDate))
+			print("discussionStartDate: " + str(delStartTime))
+                        print("discussionResultDate: " + str(discussionResultDate))
 			print("keepVote: " + str(keepVote))
 			print("deleteVote: " + str(deleteVote))
 			print("otherVotesCount: " + str(otherVotesCount))
@@ -305,7 +307,8 @@ if __name__ == "__main__":
 			results['articleTitle'].append(articleTitle)
 			results['articleLink'].append(articleLink)
 			results['discussionResult'].append(discussionResult)
-			results['discussionResultDate'].append(discussionResultDate)
+			results['discussionStartDate'].append(delStartTime)
+                        results['discussionResultDate'].append(discussionResultDate)
 			results['totalUser'].append(totalUsers)
 			results['totalPosts'].append(totalPosts)
 			results['totalWords'].append(totalWords)
@@ -321,7 +324,7 @@ if __name__ == "__main__":
 			results['revClosestID'].append(CLOSEST_revID)
 			results['revEditSize'].append(editSize)
 			results['revPageTitle'].append(CLOSEST_pageTitle)
-			
+
 			print("-------------------------")
 		except Exception as e:
 				print ( "ERROR __main__ : " + str( e ) )
