@@ -166,7 +166,7 @@ if __name__ == "__main__":
 	results['articleLink'] = []
 
 	results['discussionResult'] = []
-        results['discussionStartDate'] = []
+	results['discussionStartDate'] = []
 	results['discussionResultDate'] = []
 
 	results['totalUser'] = []
@@ -183,10 +183,15 @@ if __name__ == "__main__":
 	results['orgNotabilityCount'] = []
 	results['otherNotabilityCount'] = []
 
-	results['revClosestDate'] = []
-	results['revClosestID'] = []
-	results['revEditSize'] = []
-	results['revPageTitle'] = []
+	results['revPreviousClosestDate'] = []
+	results['revPreviousClosestID'] = []
+	results['revPreviousEditSize'] = []
+	results['revPreviousClosestPageTitle'] = []
+
+	results['revFollowingClosestDate'] = []
+	results['revFollowingClosestID'] = []
+	results['revFollowingEditSize'] = []
+	results['revFollowingClosestPageTitle'] = []
 
 	for dels in delIdentifier:
 		try:
@@ -252,11 +257,17 @@ if __name__ == "__main__":
 
 			delTime_obj = datetime.strptime(delStartTime, '%Y-%m-%d %H:%M:%S')
 			print("deletionTime: " + str(delTime_obj))
-			CLOSEST_date = -100 # I set it to -100 to make sure the value will not be one of the results, so I can update it in the first round of iteration 
-			CLOSEST_revID = -100
-			CLOSEST_diff = -100
-			CLOSEST_revIndex = -100
-			CLOSEST_pageTitle = -100
+			CLOSEST_previous_date = -100 # I set it to -100 to make sure the value will not be one of the results, so I can update it in the first round of iteration 
+			CLOSEST_previous_revID = -100
+			CLOSEST_previous_diff = -100
+			CLOSEST_previous_revIndex = -100
+			CLOSEST_previous_pageTitle = -100
+
+			CLOSEST_following_date = -100 
+			CLOSEST_following_revID = -100
+			CLOSEST_following_diff = -100
+			CLOSEST_following_revIndex = -100
+			CLOSEST_following_pageTitle = -100
 			for revIndex, rev in enumerate(revIdentifier):  # Go through the revisions, find the closes date, and keep index number to calculate the edit size 
 				revID = rev[0] # Revision ID 
 				if not rev[1]:
@@ -272,33 +283,51 @@ if __name__ == "__main__":
 				revTime_obj = datetime.strptime(revTime, '%m/%d/%Y, %H:%M:%S')
 				delta = delTime_obj - revTime_obj
 				secondDiff= delta.total_seconds() # difference in seconds between policy edit date and the start of deletion discussion 
-				if secondDiff < 0:
+				if secondDiff > 0 and CLOSEST_previous_date == -100:
+					CLOSEST_previous_date = revTime_obj
+					CLOSEST_previous_revID = revID
+					CLOSEST_previous_diff = secondDiff
+					CLOSEST_previous_pageTitle = revPageTitle
 					continue
-				if CLOSEST_date == -100:
-					CLOSEST_date = revTime_obj
-					CLOSEST_revID = revID
-					CLOSEST_diff = secondDiff
-					CLOSEST_pageTitle = revPageTitle
+				if  secondDiff > 0 and secondDiff < CLOSEST_previous_diff:
+					CLOSEST_previous_date = revTime_obj
+					CLOSEST_previous_revID = revID
+					CLOSEST_previous_diff = secondDiff
+					CLOSEST_previous_revIndex = revIndex
+					CLOSEST_previous_pageTitle = revPageTitle
+
+				if secondDiff < 0 and CLOSEST_following_date == -100:
+					CLOSEST_following_date = revTime_obj
+					CLOSEST_following_revID = revID
+					CLOSEST_following_diff = secondDiff
+					CLOSEST_following_pageTitle = revPageTitle
 					continue
-				if secondDiff < CLOSEST_diff:
-					CLOSEST_date = revTime_obj
-					CLOSEST_revID = revID
-					CLOSEST_diff = secondDiff
-					CLOSEST_revIndex = revIndex
-					CLOSEST_pageTitle = revPageTitle
+				if  secondDiff < 0 and secondDiff > CLOSEST_following_diff:
+					CLOSEST_following_date = revTime_obj
+					CLOSEST_following_revID = revID
+					CLOSEST_following_diff = secondDiff
+					CLOSEST_following_revIndex = revIndex
+					CLOSEST_following_pageTitle = revPageTitle
 
 			print("autoID: " + str(autoID))
-			print("revClosestDate: " + str(CLOSEST_date))
-			print("revClosest_ID: " + str(CLOSEST_revID))
-			print("revPageTitle: " + str(CLOSEST_pageTitle))
+			print("revPreviousClosestDate: " + str(CLOSEST_previous_date))
+			print("revPreviousClosest_ID: " + str(CLOSEST_previous_revID))
+			print("revPreviousPageTitle: " + str(CLOSEST_previous_pageTitle))
 
-			editSize = findRevEditSize(revIdentifier[CLOSEST_revIndex])
-			print("editSize: " + str(editSize))
+			print("revFollowingClosestDate: " + str(CLOSEST_following_date))
+			print("revFollowingClosest_ID: " + str(CLOSEST_following_revID))
+			print("revFollowingPageTitle: " + str(CLOSEST_following_pageTitle))
+
+			previousEditSize = findRevEditSize(revIdentifier[CLOSEST_previous_revIndex])
+			print("previousEditSize: " + str(previousEditSize))
+
+			followingEditSize = findRevEditSize(revIdentifier[CLOSEST_following_revIndex])
+			print("followingEditSize: " + str(followingEditSize))
 			print("articleTitle: " + str(articleTitle))
 			print("articleLink: " + str(articleLink))
 			print("discussionResult: " + str(discussionResult))
 			print("discussionStartDate: " + str(delStartTime))
-                        print("discussionResultDate: " + str(discussionResultDate))
+			print("discussionResultDate: " + str(discussionResultDate))
 			print("keepVote: " + str(keepVote))
 			print("deleteVote: " + str(deleteVote))
 			print("otherVotesCount: " + str(otherVotesCount))
@@ -308,7 +337,7 @@ if __name__ == "__main__":
 			results['articleLink'].append(articleLink)
 			results['discussionResult'].append(discussionResult)
 			results['discussionStartDate'].append(delStartTime)
-                        results['discussionResultDate'].append(discussionResultDate)
+			results['discussionResultDate'].append(discussionResultDate)
 			results['totalUser'].append(totalUsers)
 			results['totalPosts'].append(totalPosts)
 			results['totalWords'].append(totalWords)
@@ -320,10 +349,15 @@ if __name__ == "__main__":
 			results['eventNotabilityCount'].append( policyResult[1] )
 			results['orgNotabilityCount'].append( policyResult[2] )
 			results['otherNotabilityCount'].append( policyResult[3] )
-			results['revClosestDate'].append(str(CLOSEST_date))
-			results['revClosestID'].append(CLOSEST_revID)
-			results['revEditSize'].append(editSize)
-			results['revPageTitle'].append(CLOSEST_pageTitle)
+			results['revPreviousClosestDate'].append(str(CLOSEST_previous_date))
+			results['revPreviousClosestID'].append(CLOSEST_previous_revID)
+			results['revPreviousEditSize'].append(previousEditSize)
+			results['revPreviousClosestPageTitle'].append(CLOSEST_previous_pageTitle)
+
+			results['revFollowingClosestDate'].append(str(CLOSEST_following_date))
+			results['revFollowingClosestID'].append(CLOSEST_following_revID)
+			results['revFollowingEditSize'].append(followingEditSize)
+			results['revFollowingClosestPageTitle'].append(CLOSEST_following_pageTitle)
 
 			print("-------------------------")
 		except Exception as e:
@@ -334,7 +368,8 @@ if __name__ == "__main__":
 	df = pd.DataFrame(results)
 	print(df)
 
-	columnsTitles = [ 'articleTitle' ,'articleLink' ,'discussionResult' ,'discussionResultDate' ,'totalUser' ,'totalPosts' ,'totalWords' ,'totalChars' ,'keepVote' ,'deleteVote' ,'otherVotesCount' ,'generalNotabilityCount' ,'eventNotabilityCount' ,'orgNotabilityCount' ,'otherNotabilityCount' ,'revClosestDate' ,'revClosestID', 'revEditSize', 'revPageTitle' ]
+	columnsTitles = [ 'articleTitle' ,'articleLink' ,'discussionResult' ,'discussionResultDate' ,'totalUser' ,'totalPosts' ,'totalWords' ,'totalChars' ,'keepVote' ,'deleteVote' ,'otherVotesCount' ,'generalNotabilityCount' ,'eventNotabilityCount' ,'orgNotabilityCount' ,'otherNotabilityCount' ,'revPreviousClosestDate' ,'revPreviousClosestID', 'revPreviousEditSize', 'revPreviousClosestPageTitle' ]
 	df.to_csv("wiki_data.csv", encoding='utf-8', index=False, columns=columnsTitles)
+
 
 
