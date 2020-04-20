@@ -168,6 +168,7 @@ if __name__ == "__main__":
 	results['discussionResult'] = []
 	results['discussionStartDate'] = []
 	results['discussionResultDate'] = []
+	results['discussionDuration'] = []
 
 	results['totalUser'] = []
 	results['totalPosts'] = []
@@ -333,11 +334,24 @@ if __name__ == "__main__":
 			print("otherVotesCount: " + str(otherVotesCount))
 			print("policyResult" + str(policyResult))
 
+			delStartTime_obj = datetime.strptime(delStartTime, '%Y-%m-%d %H:%M:%S')
+			delResultTime_obj = datetime.strptime(discussionResultDate, '%Y-%m-%d %H:%M:%S')
+			print("delStartTime_obj: " + str(delStartTime_obj))
+			print("delResultTime_obj: " + str(delResultTime_obj))
+			duration = delResultTime_obj - delStartTime_obj
+			totsec = duration.total_seconds()
+			h = totsec//3600
+			m = (totsec%3600) // 60
+			discussionDuration = str(int(h)) + ":" + str(int(m));
+			print("discussionDuration: " + str(discussionDuration))
+			
+
 			results['articleTitle'].append(articleTitle)
 			results['articleLink'].append(articleLink)
 			results['discussionResult'].append(discussionResult)
 			results['discussionStartDate'].append(delStartTime)
 			results['discussionResultDate'].append(discussionResultDate)
+			results['discussionDuration'].append(discussionDuration)
 			results['totalUser'].append(totalUsers)
 			results['totalPosts'].append(totalPosts)
 			results['totalWords'].append(totalWords)
@@ -368,8 +382,9 @@ if __name__ == "__main__":
 	df = pd.DataFrame(results)
 	print(df)
 
-	columnsTitles = [ 'articleTitle' ,'articleLink' ,'discussionResult' ,'discussionResultDate' ,'totalUser' ,'totalPosts' ,'totalWords' ,'totalChars' ,'keepVote' ,'deleteVote' ,'otherVotesCount' ,'generalNotabilityCount' ,'eventNotabilityCount' ,'orgNotabilityCount' ,'otherNotabilityCount' ,'revPreviousClosestDate' ,'revPreviousClosestID', 'revPreviousEditSize', 'revPreviousClosestPageTitle' ]
+	columnsTitles = [ 'articleTitle','articleLink','discussionResult','discussionStartDate','discussionResultDate','discussionDuration','totalUser','totalPosts','totalWords','totalChars','keepVote','deleteVote','otherVotesCount','generalNotabilityCount','eventNotabilityCount','orgNotabilityCount','otherNotabilityCount','revPreviousClosestDate','revPreviousClosestID','revPreviousEditSize','revPreviousClosestPageTitle','revFollowingClosestDate','revFollowingClosestID','revFollowingEditSize','revFollowingClosestPageTitle' ]
 	df.to_csv("wiki_data.csv", encoding='utf-8', index=False, columns=columnsTitles)
+
 
 
 
