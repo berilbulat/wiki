@@ -139,8 +139,8 @@ if __name__ == "__main__":
 			writeLocalDB(results)
 
 		for revInfo in allRevisionInfo:
+                        print(revInfo)
 			results = getAddedDeletedDiff(revInfo)
-			print(revInfo['revid'])
 			if results:
 				updateLocalDB(results)
 
